@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dropout Prediction</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <div class="background-gradient"></div>
+    
+    <div class="main-container">
+        <div class="header">
+            <h1>🎓 Student Dropout Prediction System</h1>
+            <p>Predict student dropout risk using machine learning</p>
+        </div>
+
+        <div class="container">
+            <form action="/predict" method="post" class="prediction-form">
+                <fieldset>
+                    <legend>Personal Information</legend>
+                    <div class="form-group">
+                        <label for="age">Age</label>
+                        <input type="number" id="age" name="age" placeholder="Enter age (18-25)" min="17" max="25" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="gender">Gender</label>
+                        <select id="gender" name="gender" required>
+                            <option value="">-- Select Gender --</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Academic Performance</legend>
+                    <div class="form-group">
+                        <label for="attendance">Attendance Percentage</label>
+                        <input type="number" id="attendance" name="attendance" placeholder="0-100%" min="0" max="100" step="0.1" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="study_hours">Study Hours Per Day</label>
+                        <input type="number" id="study_hours" name="study_hours" placeholder="0-10 hours" min="0" max="10" step="0.5" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="exam_score">Exam Score</label>
+                        <input type="number" id="exam_score" name="exam_score" placeholder="0-100" min="0" max="100" step="0.1" required>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Financial Status</legend>
+                    <div class="form-group">
+                        <label for="scholarship">Scholarship</label>
+                        <select id="scholarship" name="scholarship" required>
+                            <option value="">-- Select --</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tuition">Tuition Fees Paid</label>
+                        <select id="tuition" name="tuition" required>
+                            <option value="">-- Select --</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="family_income">Family Income</label>
+                        <input type="number" id="family_income" name="family_income" placeholder="Enter annual income" min="0" step="1000" required>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Family Background</legend>
+                    <div class="form-group">
+                        <label for="parents_education">Parents Education Level</label>
+                        <select id="parents_education" name="parents_education" required>
+                            <option value="">-- Select Level --</option>
+                            <option value="HighSchool">High School</option>
+                            <option value="Bachelor">Bachelor</option>
+                            <option value="Master">Master</option>
+                            <option value="PhD">PhD</option>
+                        </select>
+                    </div>
+                </fieldset>
+
+                <button type="submit" class="submit-btn">🔮 Predict Dropout Risk</button>
+            </form>
+
+            {% if prediction_text %}
+            <div class="result-box {% if 'High' in prediction_text %}risk-high{% else %}risk-low{% endif %}">
+                <div class="result-content">
+                    <h2>Prediction Result</h2>
+                    <div class="prediction-status">{{ prediction_text }}</div>
+                    <div class="probability-bar" data-percentage="{{ probability }}">
+                        <div class="probability-fill"></div>
+                    </div>
+                    <p class="probability-text">Risk Probability: <strong>{{ probability }}%</strong></p>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        const probabilityBar = document.querySelector('.probability-bar');
+        if (probabilityBar) {
+            const percentage = probabilityBar.dataset.percentage;
+            const fillElement = probabilityBar.querySelector('.probability-fill');
+            fillElement.style.width = percentage + '%';
+        }
+    </script>
+
+</body>
+</html>
